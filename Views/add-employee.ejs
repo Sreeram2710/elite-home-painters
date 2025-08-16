@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add New Employee</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<%- include("partials/navbar") %>
+
+<section class="container py-5">
+  <h2>Add New Employee</h2>
+  <form action="/admin/add-employee" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label class="form-label">Full Name</label>
+      <input type="text" name="name" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Role</label>
+      <input type="text" name="role" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Salary</label>
+      <input type="number" name="salary" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Contact Number</label>
+      <input type="tel" name="contact" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Date of Joining</label>
+      <input type="date" name="doj" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Upload Photo</label>
+      <input type="file" name="photo" class="form-control" accept="image/*" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Add Employee</button>
+  </form>
+</section>
+
+<%- include("partials/footer") %>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Customer Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f9f9f9;
+      animation: fadeIn 0.6s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .welcome-text {
+      text-align: center;
+      margin-top: 40px;
+      font-weight: bold;
+      font-size: 2rem;
+      animation: slideInTop 0.8s ease forwards;
+    }
+
+    @keyframes slideInTop {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .card-container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      animation: fadeInUp 0.9s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .btn-quote {
+      background-color: #0d6efd;
+      color: white;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      margin-top: 25px;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+
+    .btn-quote:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 12px rgba(13, 110, 253, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+<%- include("partials/navbar") %>
+
+<div class="welcome-text">
+  Welcome, <%= customer.name %> 👋
+</div>
+
+<div class="card-container">
+  <p><strong>You can:</strong></p>
+  <ul>
+    <li>Request a free painting quote</li>
+    <li>Track your previous requests (feature coming soon)</li>
+    <li>Contact our team for updates or assistance</li>
+  </ul>
+
+  <a href="/customer/request-quote" class="btn btn-quote d-block text-center">
+    🎨 Request a Painting Quote
+  </a>
+</div>
+
+<%- include("partials/footer") %>
+
+</body>
+</html>

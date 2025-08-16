@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gallery Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+<%- include("partials/navbar") %>
+
+<div class="container py-4">
+  <h2 class="mb-4">Admin Gallery Management</h2>
+
+  <!-- Gallery Upload Form -->
+  <form action="/admin/gallery/upload" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label class="form-label">Caption</label>
+      <input type="text" name="caption" class="form-control" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Select Image</label>
+      <input type="file" name="image" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-success">Upload</button>
+  </form>
+
+  <!-- Existing Images -->
+  <div class="row mt-4">
+    <% images.forEach(img => { %>
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <img src="/uploads/<%= img.image %>" class="card-img-top" style="height: 200px; object-fit: cover;" />
+          <div class="card-body">
+            <p class="card-text"><%= img.caption %></p>
+            <form method="POST" action="/admin/gallery/delete/<%= img._id %>">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
+</body>
+</html>

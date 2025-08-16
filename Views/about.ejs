@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Us - EliteHomePainters</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .section {
+      padding: 60px 0;
+      animation: fadeIn 1s ease;
+    }
+
+    h1, h2 {
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .emoji {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<%- include("partials/navbar") %>
+
+<div class="container section">
+  <h1 class="text-center">About EliteHomePainters 🏡</h1>
+  <p class="text-center lead">
+    We are passionate professionals dedicated to delivering top-quality painting services that transform your space and bring your vision to life.
+  </p>
+</div>
+
+<div class="container section">
+  <h2 class="text-center">Why Choose Us?</h2>
+  <div class="row g-4 justify-content-center mt-4">
+    <div class="col-md-3">
+      <div class="feature-card text-center">
+        <div class="emoji">🎨</div>
+        <h5>Expert Craftsmanship</h5>
+        <p>Years of experience with a sharp eye for detail and excellence in every stroke.</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="feature-card text-center">
+        <div class="emoji">⏱️</div>
+        <h5>On-Time Delivery</h5>
+        <p>We respect your time and always deliver our projects punctually.</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="feature-card text-center">
+        <div class="emoji">💡</div>
+        <h5>Customized Solutions</h5>
+        <p>Tailored painting solutions based on your personal taste and project needs.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container section text-center">
+  <h2>Ready to Transform Your Home?</h2>
+  <a href="/customer/request-quote" class="btn btn-primary btn-lg mt-3">🎯 Get a Free Quote</a>
+</div>
+<!-- Company Intro Section -->
+<div class="container section">
+  <h1 class="text-center">About EliteHomePainters 🏡</h1>
+  <p class="text-center lead">
+    We’re a passionate team delivering top-quality house painting solutions across New Zealand. Transforming homes beautifully since 2018.
+  </p>
+</div>
+
+<!-- Timeline Section -->
+<div class="container section">
+  <h2 class="text-center mb-5">Our Journey 🛤️</h2>
+  <div class="timeline">
+    <div class="timeline-item left">
+      <h5>2018</h5>
+      <p>Founded with a mission to offer affordable & reliable painting services.</p>
+    </div>
+    <div class="timeline-item right">
+      <h5>2020</h5>
+      <p>Expanded our team and introduced eco-friendly paint options.</p>
+    </div>
+    <div class="timeline-item left">
+      <h5>2023</h5>
+      <p>Crossed 500+ completed projects and 300 happy homeowners!</p>
+    </div>
+  </div>
+</div>
+
+<!-- Team Section -->
+<div class="container section">
+  <h2 class="text-center mb-5">Meet Our Team 👨‍🎨👩‍🎨</h2>
+  <div class="row text-center g-4">
+    <div class="col-md-4">
+      <div class="card shadow">
+        <img src="/uploads/team1.jpg" class="card-img-top" alt="John - Founder">
+        <div class="card-body">
+          <h5 class="card-title">John D.</h5>
+          <p class="card-text">Founder & Lead Painter</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow">
+        <img src="/uploads/team2.jpg" class="card-img-top" alt="Sophie - Designer">
+        <div class="card-body">
+          <h5 class="card-title">Sophie M.</h5>
+          <p class="card-text">Interior Design Consultant</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow">
+        <img src="/uploads/team3.jpg" class="card-img-top" alt="Mark - Project Manager">
+        <div class="card-body">
+          <h5 class="card-title">Mark T.</h5>
+          <p class="card-text">Project Coordinator</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Google Maps Section -->
+<div class="container section text-center">
+  <h2 class="mb-4">Where We Work 📍</h2>
+  <p>EliteHomePainters proudly serves Auckland and surrounding areas.</p>
+  <div class="ratio ratio-16x9 mt-3">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3182.7494401384687!2d174.763331!3d-36.84846!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6d0d47f9339b249b%3A0x1dd38a0848cb276e!2sAuckland%20CBD%2C%20Auckland%2C%20New%20Zealand!5e0!3m2!1sen!2snz!4v1614797920327!5m2!1sen!2snz" 
+      width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+    </iframe>
+  </div>
+</div>
+<style>
+
+  .section {
+    padding: 60px 0;
+    animation: fadeIn 1s ease;
+  }
+
+  .timeline {
+    position: relative;
+    padding: 2rem 0;
+  }
+
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: #0d6efd;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+  }
+
+  .timeline-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+    padding: 1rem 2rem;
+    position: relative;
+    width: 50%;
+  }
+
+  .timeline-item.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .timeline-item.left {
+    left: 0;
+    text-align: right;
+  }
+
+  .timeline-item.right {
+    left: 50%;
+    text-align: left;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    border-style: solid;
+  }
+
+  .timeline-item.left::before {
+    right: -10px;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent #0d6efd transparent transparent;
+  }
+
+  .timeline-item.right::before {
+    left: -10px;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent #0d6efd;
+  }
+
+  /* Team Card Styling */
+  .card {
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  .card:hover .card-body::after {
+    content: attr(data-tooltip);
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 5px;
+    background: #0d6efd;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .card-body {
+    position: relative;
+  }
+
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+
+
+
+</style>
+<%- include("partials/footer") %>
+<script>
+  // Scroll-trigger animation for timeline
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  });
+
+  document.querySelectorAll('.timeline-item').forEach(item => {
+    observer.observe(item);
+  });
+</script>
+
+</body>
+</html>

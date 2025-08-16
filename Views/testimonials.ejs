@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Testimonials</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #f6f8fa;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 50px 0 30px;
+      animation: fadeInDown 0.8s ease-in-out;
+    }
+
+    .testimonial-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeInUp 0.7s ease both;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .testimonial-card:not(:first-child) {
+      animation-delay: 0.2s;
+    }
+
+    .testimonial-card:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .stars {
+      color: #fbc02d;
+      font-size: 1.2rem;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+<%- include("partials/navbar") %>
+
+<div class="container">
+  <h2 class="section-title">What Our Clients Say</h2>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-4">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <h5 class="mt-2"><strong>Sophie R.</strong></h5>
+        <p><em>"Absolutely thrilled with the professional job the team did. My house looks brand new!"</em></p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="testimonial-card">
+        <div class="stars">★★★★☆</div>
+        <h5 class="mt-2"><strong>James K.</strong></h5>
+        <p><em>"Great service and attention to detail. Will definitely recommend to friends and family."</em></p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <h5 class="mt-2"><strong>Priya M.</strong></h5>
+        <p><em>"The best painting company I’ve hired. Affordable, fast, and very respectful of our home."</em></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
+</body>
+</html>

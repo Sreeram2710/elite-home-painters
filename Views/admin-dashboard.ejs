@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+    }
+    .card:hover {
+      transform: scale(1.03);
+    }
+    .dashboard-links a {
+      display: inline-block;
+      margin-right: 15px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .emoji {
+      font-size: 2rem;
+    }
+  </style>
+</head>
+<body>
+<%- include("partials/navbar") %>
+
+<div class="container py-5 text-center">
+  <h2 class="mb-4">Welcome, Admin <span class="emoji">🎨</span></h2>
+  <p class="mb-4">Use the links below to manage the website:</p>
+  <div class="dashboard-links mb-5">
+    <a href="/admin/add-employee" class="btn btn-outline-primary">➕ Add New Employee</a>
+    <a href="/admin/employees" class="btn btn-outline-secondary">👥 View / Deactivate Employees</a>
+    <a href="/admin/generate-payslip" class="btn btn-outline-success">🧾 Generate Payslip</a>
+    <a href="/admin/quote-requests" class="btn btn-outline-info">📬 View Quote Requests</a>
+  </div>
+
+  <h3 class="mb-4">📊 Admin Stats</h3>
+  <div class="row justify-content-center">
+    <div class="col-md-3 mb-4">
+      <div class="card p-4">
+        <div class="card-body">
+          <div class="emoji mb-2">👤</div>
+          <h3><%= customerCount %></h3>
+          <p class="mb-0">Total Registered Customers</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="card p-4">
+        <div class="card-body">
+          <div class="emoji mb-2">📥</div>
+          <h3><%= quoteCount %></h3>
+          <p class="mb-0">Total Quote Requests</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="card p-4">
+        <div class="card-body">
+          <div class="emoji mb-2">🧑‍🎨</div>
+          <h3><%= activeEmployees %></h3>
+          <p class="mb-0">Active Employees</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
+</body>
+</html>
