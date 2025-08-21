@@ -26,6 +26,34 @@
     .emoji {
       font-size: 2rem;
     }
+
+    #notifIcon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      z-index: 1000;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #333;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 5px;
+      display: none;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
@@ -72,6 +100,60 @@
     </div>
   </div>
 </div>
+
+<!-- Notification icon -->
+<div id="notifIcon" style="display: none;">0</div>
+
+<!-- Toast popup -->
+<div id="toast">📬 New Quote Request Received!</div>
+
+<!-- Notification sound -->
+<audio id="notifSound" src="/sounds/notification.mp3" preload="auto"></audio>
+
+<script>
+  // Fix VS Code linting error: wrap value in a string then convert
+  let lastQuoteCount = parseInt("<%= quoteCount %>");
+
+  async function checkNewQuotes() {
+    try {
+      const res = await fetch('/admin/api/quote-count');
+      const data = await res.json();
+
+      if (data.count > lastQuoteCount) {
+        const newQuotes = data.count - lastQuoteCount;
+        lastQuoteCount = data.count;
+
+        // 🔊 Play notification
+        document.getElementById('notifSound').play();
+
+        // 🔔 Show count in red bubble
+        const icon = document.getElementById('notifIcon');
+        icon.innerText = newQuotes;
+        icon.style.display = 'flex';
+
+        // 🔄 Reset on click
+        icon.onclick = async () => {
+          icon.style.display = 'none';
+          icon.innerText = '0';
+          await fetch('/admin/reset-notifications', { method: 'POST' });
+        };
+
+        // 💬 Show toast
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => {
+          toast.style.display = 'none';
+        }, 3000);
+      }
+
+    } catch (err) {
+      console.error('❌ Failed to check quote count:', err);
+    }
+  }
+
+  // Run every 5 seconds
+  setInterval(checkNewQuotes, 5000);
+</script>
 
 <%- include("partials/footer") %>
 </body>

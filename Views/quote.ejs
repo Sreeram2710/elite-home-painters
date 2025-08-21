@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Request a Free Quote</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<%- include('partials/navbar') %>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4 fw-bold">Request a Free Quote</h2>
+
+  <form method="POST" action="/quote" class="p-4 shadow rounded bg-light">
+    <!-- Name -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">First Name:</label>
+        <input type="text" class="form-control" name="firstName" required />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Last Name:</label>
+        <input type="text" class="form-control" name="lastName" required />
+      </div>
+    </div>
+
+    <!-- Email and Phone -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Email:</label>
+        <input type="email" class="form-control" name="email" required />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Phone:</label>
+        <input type="text" class="form-control" name="phone" required />
+      </div>
+    </div>
+
+    <!-- Square Feet & Paint Type -->
+    <div class="mb-3">
+      <label class="form-label">Square Feet:</label>
+      <input type="number" class="form-control" name="area" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Paint Type:</label>
+      <select class="form-select" name="paintType" required>
+        <option value="">Select paint type</option>
+        <option>Interior</option>
+        <option>Exterior</option>
+        <option>Roof</option>
+        <option>Deck</option>
+        <option>General</option>
+        <option>Spray</option>
+        <option>Premium</option>
+      </select>
+    </div>
+
+    <!-- Services -->
+    <div class="mb-3">
+      <label class="form-label">Services:</label><br />
+      <% const serviceList = [
+        "Interior Painting", "Exterior Painting", "Roof Painting",
+        "Deck Protection", "Spray Painting", "General Painting",
+        "Wallpaper Removal", "Commercial Painting", "Fence Painting",
+        "New Build Painting", "Repainting", "Industrial Coating"
+      ]; %>
+      <% serviceList.forEach(service => { %>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="services" value="<%= service %>">
+          <label class="form-check-label"><%= service %></label>
+        </div>
+      <% }); %>
+    </div>
+
+    <!-- Message -->
+    <div class="mb-3">
+      <label class="form-label">Tell us more:</label>
+      <textarea class="form-control" name="details" rows="3" placeholder="e.g. We need 3 rooms painted, plus extension..."></textarea>
+    </div>
+
+    <!-- Moved Country and Address to bottom -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Country:</label>
+        <select class="form-select" name="country" required>
+          <option selected>New Zealand</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Address:</label>
+        <input type="text" class="form-control" name="address" placeholder="Street, Suburb, City" required />
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn btn-primary w-100">Submit</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

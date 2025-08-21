@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand d-flex align-items-center" href="/">
-  <img src="/images/logo2.png" alt="EliteHomePainters Logo" style="height: 100px; margin-right: 10px;" title="EliteHomePainters"/>
-  <span class="fw-bold">EliteHomePainters</span>
-</a>
+      <img src="/images/logo2.png" alt="EliteHomePainters Logo" style="height: 100px; margin-right: 10px;" title="EliteHomePainters"/>
+      <span class="fw-bold">EliteHomePainters</span>
+    </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -24,22 +24,26 @@
             <a class="nav-link" href="/admin/dashboard">Admin Panel</a>
           </li>
           <li class="nav-item">
-  <a class="nav-link" href="/admin/gallery">Gallery Management</a>
-</li>
-
-          <li class="nav-item">
-            <a class="btn btn-outline-danger ms-2" href="/admin/logout">Logout</a>
+            <a class="nav-link" href="/admin/gallery">Gallery Management</a>
+          </li>
+          <li class="nav-item d-flex align-items-center">
+            <!-- 🔔 Bell Icon -->
+            <div id="notifContainer" class="me-2">
+              <span class="notif-icon fs-5 text-danger" id="adminBell">🔔<span id="notifBadge" class="d-none">1</span></span>
+            </div>
+            <!-- Logout -->
+            <a class="btn btn-outline-danger ms-1" href="/logout">Logout</a>
           </li>
         <% } else if (customer) { %>
           <li class="nav-item">
             <a class="nav-link" href="/customer/dashboard">Welcome, <%= customer.name %></a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-outline-danger ms-2" href="/customer/logout">Logout</a>
+            <a class="btn btn-outline-danger ms-2" href="/logout">Logout</a>
           </li>
         <% } else { %>
           <li class="nav-item">
-            <a class="btn btn-primary ms-2" href="/login">Login</a>
+            <a class="btn btn-primary ms-2" href="/customer/login">Login</a>
           </li>
         <% } %>
       </ul>
