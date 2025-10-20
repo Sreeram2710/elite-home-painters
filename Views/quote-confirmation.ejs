@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Quote Submitted - EliteHomePainters</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -13,18 +14,44 @@
       <h2 class="fw-bold mb-3">🎉 Thank You for Your Request!</h2>
       <p class="lead">We’ve received your quote request and our team will get back to you shortly.</p>
 
-      <% if (quote) { %>
+      <% if (typeof quote !== 'undefined' && quote) { %>
         <hr />
         <div class="mt-4 text-start">
-          <h5><strong>Name:</strong> <%= quote.name || "N/A" %></h5>
-          <h5><strong>Service:</strong> <%= quote.paintType || "N/A" %></h5>
-          
-          <h5><strong>Message:</strong> <%= quote.message?.trim() ? quote.message : "–" %></h5>
+          <h5><strong>Name:</strong> <%= (quote.name || "N/A") %></h5>
+          <h5><strong>Service:</strong> <%= (quote.paintType || "N/A") %></h5>
 
-          <h5 class="mt-3 text-success">
-            <strong>🧾 Estimated Price:</strong> $<%= quote.estimatedPrice?.toFixed(2) || "0.00" %>
+          <% if (quote.message && quote.message.trim()) { %>
+            <div class="card mt-3">
+              <div class="card-header fw-semibold">Tell us more (your message)</div>
+              <div class="card-body">
+                <pre class="mb-0" style="white-space: pre-wrap;"><%= quote.message %></pre>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="alert alert-info mt-3 mb-0">
+              You didn’t add anything in “Tell us more.” You can still share details by replying to our email.
+            </div>
+          <% } %>
+
+          <% 
+            let est = "0.00";
+            if (quote.estimatedPrice && !isNaN(Number(quote.estimatedPrice))) {
+              est = Number(quote.estimatedPrice).toFixed(2);
+            }
+          %>
+          <h5 class="mt-4 text-success">
+            <strong>🧾 Estimated Price:</strong> $<%= est %>
           </h5>
           <p class="text-muted">This is an auto-generated estimate based on the area you provided.</p>
+
+          <!-- 📞 Call Expert Painter (inside the green section) -->
+          <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mt-3 p-3 bg-white rounded border">
+            <div class="fw-semibold">
+              📞 Call Expert Painter: 
+              <a href="tel:02040778633" class="text-decoration-none">02040778633</a>
+            </div>
+            <a href="tel:02040778633" class="btn btn-success">Call Now</a>
+          </div>
         </div>
       <% } %>
 
@@ -33,6 +60,5 @@
   </div>
 
   <%- include('partials/footer') %>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

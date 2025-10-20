@@ -20,21 +20,21 @@
         <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
 
         <% if (admin) { %>
-          <li class="nav-item">
-            <a class="nav-link" href="/admin/dashboard">Admin Panel</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/admin/gallery">Gallery Management</a>
-          </li>
+          <!-- Admin specific links -->
+          <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Admin Panel</a></li>
+          <li class="nav-item"><a class="nav-link" href="/admin/gallery">Gallery Management</a></li>
           <li class="nav-item d-flex align-items-center">
             <!-- 🔔 Bell Icon -->
             <div id="notifContainer" class="me-2">
-              <span class="notif-icon fs-5 text-danger" id="adminBell">🔔<span id="notifBadge" class="d-none">1</span></span>
+              <span class="notif-icon fs-5 text-danger" id="adminBell">
+                🔔<span id="notifBadge" class="d-none">1</span>
+              </span>
             </div>
             <!-- Logout -->
             <a class="btn btn-outline-danger ms-1" href="/logout">Logout</a>
           </li>
         <% } else if (customer) { %>
+          <!-- Customer specific links -->
           <li class="nav-item">
             <a class="nav-link" href="/customer/dashboard">Welcome, <%= customer.name %></a>
           </li>
@@ -42,11 +42,75 @@
             <a class="btn btn-outline-danger ms-2" href="/logout">Logout</a>
           </li>
         <% } else { %>
+          <!-- Guest -->
           <li class="nav-item">
             <a class="btn btn-primary ms-2" href="/customer/login">Login</a>
           </li>
         <% } %>
+
+        <!-- Chat link (only one block, dynamic) -->
+        <li class="nav-item">
+          <% if (admin) { %>
+            <a class="nav-link position-relative" href="/admin/chat">
+              Chat
+              <% if ((chatUnreadCount || 0) > 0) { %>
+                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                  <%= chatUnreadCount %>
+                </span>
+              <% } %>
+            </a>
+          <% } else if (customer) { %>
+            <a class="nav-link position-relative" href="/chat">
+              Chat
+              <% if ((chatUnreadCount || 0) > 0) { %>
+                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                  <%= chatUnreadCount %>
+                </span>
+              <% } %>
+            </a>
+          <% } %>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
+
+<!-- 🔔 Global Ping Sound -->
+<audio id="globalPing" src="/sounds/ping.mp3" preload="auto"></audio>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  (function(){
+    const userId = "<%= (customer?._id || admin?._id) ? String((customer?._id || admin?._id)) : '' %>";
+    const role = "<%= customer ? 'customer' : (admin ? 'admin' : '') %>";
+    if (!userId || !role) return;
+
+    const socket = io({ query: { userId, role } });
+    const $ping = document.getElementById("globalPing");
+
+    // Unlock audio once by interaction
+    let audioUnlocked = false;
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      $ping.muted = true;
+      $ping.play().then(() => {
+        $ping.pause();
+        $ping.currentTime = 0;
+        $ping.muted = false;
+        audioUnlocked = true;
+      }).catch(()=>{});
+    }
+    window.addEventListener("click", unlockAudio, { once: true });
+    window.addEventListener("keydown", unlockAudio, { once: true });
+    window.addEventListener("touchstart", unlockAudio, { once: true });
+
+    // 🔔 Play ping when a new message arrives
+    socket.on("chat:notify", ({ message }) => {
+      try {
+        $ping.pause();
+        $ping.currentTime = 0;
+        $ping.play().catch(()=>{});
+      } catch(e) { console.error("Ping failed:", e); }
+    });
+  })();
+</script>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin · Chat with <%= customer?.name || "Customer" %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body { background-color: #f8f9fa; }
+    .chat-container {
+      max-width: 980px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+    }
+    .chat-header {
+      padding: 15px;
+      background: #198754; /* Bootstrap green */
+      color: #fff;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background: #f1f5f9;
+    }
+    .chat-message { margin-bottom: 12px; display: flex; flex-direction: column; }
+    .chat-message .bubble {
+      padding: 10px 14px;
+      border-radius: 16px;
+      max-width: 70%;
+      word-break: break-word;
+    }
+    .chat-message.admin .bubble {
+      align-self: flex-end;
+      background: #198754;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-message.customer .bubble {
+      align-self: flex-start;
+      background: #e9ecef;
+      color: #000;
+      border-bottom-left-radius: 4px;
+    }
+    .chat-input {
+      padding: 12px;
+      border-top: 1px solid #dee2e6;
+      display: flex;
+      gap: 10px;
+    }
+    .back-link { color: #fff; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; color: #e9f7ee; }
+  </style>
+</head>
+<body>
+  <%- include("partials/navbar") %>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <div>
+        <a class="back-link me-3" href="/admin/dashboard">← Back</a>
+        Chat with <strong><%= customer?.name || "Customer" %></strong>
+        <small class="ms-2 opacity-75">(<%= customer?.email || "no email" %>)</small>
+      </div>
+      <div id="typing" class="small"></div>
+    </div>
+
+    <div id="messages" class="chat-messages"></div>
+
+    <form id="chatForm" class="chat-input" autocomplete="off">
+      <input id="msg" class="form-control" placeholder="Type your message to the customer..." />
+      <button class="btn btn-success" type="submit">Send</button>
+    </form>
+  </div>
+
+  <!-- 🔔 Ping sound -->
+  <audio id="ping" src="/sounds/ping.mp3" preload="auto"></audio>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // ---- Context from server render ----
+    const customerId = "<%= customer?._id %>";
+    const adminId = "<%= admin?._id %>";
+    const role = "admin";
+
+    // ---- Elements ----
+    const $list = document.getElementById("messages");
+    const $form = document.getElementById("chatForm");
+    const $msg  = document.getElementById("msg");
+    const $typing = document.getElementById("typing");
+    const $ping = document.getElementById("ping");
+
+    // ---- Helpers ----
+    function escapeHtml(s){
+      return String(s||"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;", ">":"&gt;",'"':"&quot;","'":"&#039;" }[m]))
+    }
+    function addMessage(m) {
+      const wrapper = document.createElement("div");
+      wrapper.className = `chat-message ${m.fromRole}`;
+      wrapper.innerHTML = `
+        <div class="bubble">
+          ${escapeHtml(m.body)}
+          <div class="small opacity-75 mt-1">${new Date(m.createdAt).toLocaleTimeString()}</div>
+        </div>`;
+      $list.appendChild(wrapper);
+      $list.scrollTop = $list.scrollHeight;
+    }
+
+    // --- Ping sound helper ---
+    function playPing() {
+      try {
+        $ping.pause();
+        $ping.currentTime = 0;
+        const p = $ping.play();
+        if (p && typeof p.then === "function") p.catch(()=>{});
+      } catch(e) {}
+    }
+
+    // Unlock audio after first interaction
+    let audioUnlocked = false;
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      $ping.muted = true;
+      $ping.play().then(() => {
+        $ping.pause();
+        $ping.currentTime = 0;
+        $ping.muted = false;
+        audioUnlocked = true;
+      }).catch(()=>{});
+    }
+    window.addEventListener("click", unlockAudio, { once: true });
+    window.addEventListener("keydown", unlockAudio, { once: true });
+    window.addEventListener("touchstart", unlockAudio, { once: true });
+
+    // ---- Socket.io ----
+    const socket = io({ query: { userId: adminId, role, customerIdForRoom: customerId } });
+
+    // Load history then mark as read
+    fetch(`/chat/history/${customerId}`)
+      .then(r=>r.json()).then(d=>{
+        (d.messages||[]).forEach(addMessage);
+        return fetch(`/chat/read/${customerId}`, { method:"POST" });
+      }).catch(()=>{});
+
+    // Receive
+    socket.on("chat:message", ({ message }) => {
+      addMessage(message);
+      if (message.fromRole === "customer") {
+        playPing();   // 🔔 sound
+        fetch(`/chat/read/${customerId}`, { method:"POST" }).catch(()=>{});
+      }
+    });
+
+    // Typing indicator
+    socket.on("chat:typing", ({ fromRole, isTyping }) => {
+      $typing.textContent = (fromRole === "customer" && isTyping) ? "Customer is typing..." : "";
+    });
+
+    // Send
+    $form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const body = ($msg.value || "").trim();
+      if (!body) return;
+      socket.emit("chat:send", { customerId, body });
+      $msg.value = "";
+    });
+  </script>
+</body>
+</html>

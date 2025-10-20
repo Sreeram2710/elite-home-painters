@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Request a Free Quote</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -12,52 +13,79 @@
 <div class="container mt-5">
   <h2 class="text-center mb-4 fw-bold">Request a Free Quote</h2>
 
-  <form method="POST" action="/quote" class="p-4 shadow rounded bg-light">
+  <!-- Server expects: name, email, phone, address, paintType, area, message (+ optional counts) -->
+  <form id="quoteForm" method="POST" action="/quote" class="p-4 shadow rounded bg-light" novalidate>
+    <!-- Hidden full name field that app.js expects -->
+    <input type="hidden" name="name" id="fullName" />
+
     <!-- Name -->
     <div class="row mb-3">
       <div class="col-md-6">
-        <label class="form-label">First Name:</label>
-        <input type="text" class="form-control" name="firstName" required />
+        <label class="form-label" for="firstName">First Name:</label>
+        <input type="text" class="form-control" id="firstName" required />
       </div>
       <div class="col-md-6">
-        <label class="form-label">Last Name:</label>
-        <input type="text" class="form-control" name="lastName" required />
+        <label class="form-label" for="lastName">Last Name:</label>
+        <input type="text" class="form-control" id="lastName" required />
       </div>
     </div>
 
     <!-- Email and Phone -->
     <div class="row mb-3">
       <div class="col-md-6">
-        <label class="form-label">Email:</label>
-        <input type="email" class="form-control" name="email" required />
+        <label class="form-label" for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email" required />
       </div>
       <div class="col-md-6">
-        <label class="form-label">Phone:</label>
-        <input type="text" class="form-control" name="phone" required />
+        <label class="form-label" for="phone">Phone:</label>
+        <input type="text" class="form-control" id="phone" name="phone" required />
       </div>
     </div>
 
-    <!-- Square Feet & Paint Type -->
-    <div class="mb-3">
-      <label class="form-label">Square Feet:</label>
-      <input type="number" class="form-control" name="area" required />
+    <!-- Area (m²) & Paint Type -->
+    <div class="mb-1">
+      <label class="form-label" for="area">Square Meters (m²):</label>
+      <input type="number" class="form-control" id="area" name="area" min="0" step="1" required />
+    </div>
+    <div class="form-text mb-3">
+      Pricing: <strong>$65 NZD per m²</strong>. Extras below are optional.
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Paint Type:</label>
-      <select class="form-select" name="paintType" required>
+      <label class="form-label" for="paintType">Paint Type:</label>
+      <select class="form-select" id="paintType" name="paintType" required>
         <option value="">Select paint type</option>
-        <option>Interior</option>
-        <option>Exterior</option>
-        <option>Roof</option>
-        <option>Deck</option>
-        <option>General</option>
-        <option>Spray</option>
-        <option>Premium</option>
+        <option value="Interior">Interior</option>
+        <option value="Exterior">Exterior</option>
+        <option value="Roof">Roof</option>
+        <option value="Deck">Deck</option>
+        <option value="General">General</option>
+        <option value="Spray">Spray</option>
+        <option value="Premium">Premium</option>
       </select>
     </div>
 
-    <!-- Services -->
+    <!-- Extras (counts) -->
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <label class="form-label" for="windows">Windows ($250 ea)</label>
+        <input type="number" class="form-control" id="windows" name="windows" min="0" step="1" value="0" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label" for="doors">Doors ($250 ea)</label>
+        <input type="number" class="form-control" id="doors" name="doors" min="0" step="1" value="0" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label" for="frames">Frames ($250 ea)</label>
+        <input type="number" class="form-control" id="frames" name="frames" min="0" step="1" value="0" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label" for="features">Feature walls ($500 ea)</label>
+        <input type="number" class="form-control" id="features" name="features" min="0" step="1" value="0" />
+      </div>
+    </div>
+
+    <!-- Services (optional UI) -->
     <div class="mb-3">
       <label class="form-label">Services:</label><br />
       <% const serviceList = [
@@ -68,29 +96,37 @@
       ]; %>
       <% serviceList.forEach(service => { %>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="services" value="<%= service %>">
+          <input class="form-check-input" type="checkbox" name="services[]" value="<%= service %>">
           <label class="form-check-label"><%= service %></label>
         </div>
       <% }); %>
     </div>
 
-    <!-- Message -->
+    <!-- Message (Tell us more) -->
     <div class="mb-3">
-      <label class="form-label">Tell us more:</label>
-      <textarea class="form-control" name="details" rows="3" placeholder="e.g. We need 3 rooms painted, plus extension..."></textarea>
+      <label class="form-label" for="message">Tell us more:</label>
+      <textarea
+        class="form-control"
+        id="message"
+        name="message"
+        rows="3"
+        maxlength="1000"
+        placeholder="e.g. 3 rooms and hallway, minor plastering, neutral colours, access after 5pm…"
+      ></textarea>
+      <div class="form-text">Optional. <span id="msgRemain">1000</span> characters remaining.</div>
     </div>
 
-    <!-- Moved Country and Address to bottom -->
+    <!-- Country and Address -->
     <div class="row mb-3">
       <div class="col-md-6">
-        <label class="form-label">Country:</label>
-        <select class="form-select" name="country" required>
-          <option selected>New Zealand</option>
+        <label class="form-label" for="country">Country:</label>
+        <select class="form-select" id="country" name="country" required>
+          <option value="New Zealand" selected>New Zealand</option>
         </select>
       </div>
       <div class="col-md-6">
-        <label class="form-label">Address:</label>
-        <input type="text" class="form-control" name="address" placeholder="Street, Suburb, City" required />
+        <label class="form-label" for="address">Address:</label>
+        <input type="text" class="form-control" id="address" name="address" placeholder="Street, Suburb, City" required />
       </div>
     </div>
 
@@ -100,6 +136,40 @@
 </div>
 
 <%- include('partials/footer') %>
+
+<script>
+  (function () {
+    const form = document.getElementById('quoteForm');
+    const first = document.getElementById('firstName');
+    const last = document.getElementById('lastName');
+    const full = document.getElementById('fullName');
+    const ta = document.getElementById('message');
+    const remain = document.getElementById('msgRemain');
+
+    function updateFullName() {
+      const f = (first.value || '').trim();
+      const l = (last.value || '').trim();
+      full.value = (f + ' ' + l).trim();
+    }
+
+    first.addEventListener('input', updateFullName);
+    last.addEventListener('input', updateFullName);
+
+    if (ta && remain) {
+      const update = () => remain.textContent = 1000 - (ta.value?.length || 0);
+      ta.addEventListener('input', update);
+      update();
+    }
+
+    form.addEventListener('submit', function (e) {
+      updateFullName();
+      if (!full.value) {
+        e.preventDefault();
+        alert('Please enter your first and last name.');
+      }
+    });
+  })();
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
